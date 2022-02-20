@@ -68,12 +68,12 @@ class Solution:
     
     def average_sales_amount_per_order(self) -> float:
         # TODO
-        return 0.0
+        return round(Solution.total_sales(self)/Solution.num_orders(self), 2)
 
     def num_different_items_sold(self) -> int:
         # TODO
         # How many different items are sold?
-        return -1
+        return len(self.chipo['item_name'].unique())
     
     def plot_histogram_top_x_popular_items(self, x:int) -> None:
         from collections import Counter
@@ -87,6 +87,12 @@ class Solution:
         #     y: Number of Orders
         #     title: Most popular items
         # 5. show the plot. Hint: plt.show(block=True).
+        df = pd.DataFrame(letter_counter.items())
+        df = df.sort_values(by=['quantity'], ascending=False).head(x)
+        df.plot.bar(x=0,y=1,rot=0)
+        plt.xlabel('ITEMS')
+        plt.ylabel('NUMBER OF ORDERS')
+        plt.show(block=True)
         pass
         
     def scatter_plot_num_items_per_order_price(self) -> None:
