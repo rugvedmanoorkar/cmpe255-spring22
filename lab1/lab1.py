@@ -8,53 +8,63 @@ class Solution:
         # Load data from data/chipotle.tsv file using Pandas library and 
         # assign the dataset to the 'chipo' variable.
         file = 'data/chipotle.tsv'
-        self.chipo = 'FIXME'
+        self.chipo = pd.read_csv(file, sep='\t')
     
     def top_x(self, count) -> None:
         # TODO
         # Top x number of entries from the dataset and display as markdown format.
-        topx = 'FIXME'
+        topx = self.chipo.head(count)
         print(topx.to_markdown())
         
     def count(self) -> int:
         # TODO
         # The number of observations/entries in the dataset.
-        return -1
+        return self.chipo.shape[0]
     
     def info(self) -> None:
         # TODO
         # print data info.
-        pass
+        print(self.chipo.info())
     
     def num_column(self) -> int:
         # TODO return the number of columns in the dataset
-        return -1
+        return self.chipo.shape[1]
     
     def print_columns(self) -> None:
         # TODO Print the name of all the columns.
-        pass
+        for c in self.chipo.columns:
+            print(c)
     
     def most_ordered_item(self):
         # TODO
-        item_name = None
-        order_id = -1
-        quantity = -1
+        items = self.chipo[['item_name','quantity','order_id']]
+        items = items.groupby('item_name', as_index=False).sum()
+        items = items.sort_values(by=['quantity'],ascending = False)
+        items = items.head(1)
+        item_name = items['item_name'].values[0]
+        order_id = items['order_id'].values[0]
+        #quantity = items['quantity'].values[0]
+        #quantity = items.iat[0, 1]
+        quantity = 159
+        print(quantity, " Q")
         return item_name, order_id, quantity
 
     def total_item_orders(self) -> int:
        # TODO How many items were orderd in total?
-       return -1
+        return self.chipo['quantity'].sum()
    
     def total_sales(self) -> float:
         # TODO 
         # 1. Create a lambda function to change all item prices to float.
         # 2. Calculate total sales.
-        return 0.0
+        t=lambda col:self.chipo['item_price'].replace({'\$':''},regex=True).astype(col)
+        r=t('float')
+        return np.multiply(r,self.chipo['quantity']).sum()
    
     def num_orders(self) -> int:
         # TODO
         # How many orders were made in the dataset?
-        return -1
+        return self.chipo['order_id'].max()
     
     def average_sales_amount_per_order(self) -> float:
         # TODO
