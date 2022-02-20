@@ -88,12 +88,13 @@ class Solution:
         #     title: Most popular items
         # 5. show the plot. Hint: plt.show(block=True).
         df = pd.DataFrame(letter_counter.items())
-        df = df.sort_values(by=['quantity'], ascending=False).head(x)
+        df = df.sort_values(1, ascending=False).head(x)
         df.plot.bar(x=0,y=1,rot=0)
-        plt.xlabel('ITEMS')
-        plt.ylabel('NUMBER OF ORDERS')
+        plt.xlabel('Items')
+        plt.ylabel('Number of Orders')
         plt.show(block=True)
-        pass
+        plt.savefig('bar.png')
+        
         
     def scatter_plot_num_items_per_order_price(self) -> None:
         # TODO
@@ -108,7 +109,14 @@ class Solution:
         #       title: Numer of items per order price
         #       x: Order Price
         #       y: Num Items
-        pass
+        items = self.chipo
+        items['item_price'] = items['item_price'].replace('[\$,]', '', regex=True).astype('float')
+        items.groupby('order_id').sum()
+        items.plot.scatter(x='item_price', y='quantity', s=50, c='blue')
+        plt.ylabel('Num Items')
+        plt.xlabel('Order Price')
+        plt.show(block=True)
+        plt.savefig('scatter.png')
     
         
 
